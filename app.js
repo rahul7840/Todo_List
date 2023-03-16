@@ -11,6 +11,7 @@ app.use(express.static("public"));
 
 
 var items=["Drink 5L water","Do code"];
+let workItems=[""]
 
 app.get("/", (req, res) => {
     var today = new Date();
@@ -24,14 +25,33 @@ app.get("/", (req, res) => {
     }
 
     var day = today.toLocaleDateString("en-IN", options)
-    res.render("list.ejs", { kindofday: day, newListItems:items })
+    res.render("list.ejs", { listTitle: day, newListItems:items })
 })
 
-app.post("/", (req, res) => {
-     item = req.body.newItem;
-     items.push(item)
-     res.redirect("/")
+// app.post("/", (req, res) => {
+//      item = req.body.newItem;
+//      items.push(item)
+//      res.redirect("/")
+// })
+
+app.get("/work", (req,res)=>{
+    res.render("list.ejs",{listTitle:"Work",newListItems:items });
 })
+app.post("/", (req,res)=>{
+   
+
+    let item = req.body.newItem;
+
+    if(req.body.list === "work"){
+        workItems.push(item);
+        res.redirect("/work");
+    } else {
+        items.push(item);
+        res.redirect("/");
+    }
+});
+
+
 
 
 
